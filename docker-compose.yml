@@ -5,5 +5,7 @@ services:
     image: todo-app:latest
     ports:
       - '80:5000'
+    volumes:
+      - /home/todo-app/todo-data/todo.db:/todo-app/todo.db
     container_name: todo
     restart: 'unless-stopped'
