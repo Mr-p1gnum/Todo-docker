@@ -33,3 +33,21 @@ services:
 Внешний порт
 
 ```
+# Nginx.conf
+```
+events {
+   worker_connections 1024;
+}
+http {
+ server {
+       listen 80;
+       server_name todo.local; # <== Доменное имя
+       location / {
+           proxy_pass http://192.168.0.3:200; # <== Внешний порт контейнера (у меня 200)
+           proxy_set_header Host $host; # <== Этот блок отвечает за логирование(1)
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For proxy_add_x_forwarded_for; # <== (1)
+                  }
+          }
+}         
+```
