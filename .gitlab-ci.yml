@@ -3,26 +3,22 @@ stages:
   - test
   - deploy_dev
   - deploy_prod
-  - finish
+
 
 variables:
-  OWNER_NAME: Mr-p1gnum
-  CICD_VERSION: v1.0
-  LOG_FILE_NAME: $CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA.txt
+CI_REGISTRY_IMAGE: todo-app
 
 image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 
-default:
-  artifacts:
-    paths:
-        - $LOG_FILE_NAME
 
 
 build-job:
   stage: build
   script: 
     - echo "Build Started"
-    - echo "Bulding..."> $LOG_FILE_NAME
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - echo "Build completed"
 
 test-job:
@@ -32,23 +28,6 @@ test-job:
     - echo "Testing...">> $LOG_FILE_NAME
     - echo "Test completed"
 
-test-job2:
-  stage: test
-  script: 
-    - echo "Test2 Started"
-    - echo "Testing2...">> $LOG_FILE_NAME
-    - echo "Test2 completed"
-
-
-test-job3:
-  stage: test
-  needs:
-    - test-job2
-    - test-job
-  script: 
-    - echo "Test3 Started"
-    - echo "Testing3...">> $LOG_FILE_NAME
-    - echo "Test3 completed"
 
 
 deploy_to_dev_job:
@@ -70,13 +49,3 @@ deploy_to_prod_job:
     - echo "Deploy to PROD..." >> $LOG_FILE_NAME
     - echo "---Deploy to PROD Completed---"  
     - cat $LOG_FILE_NAME
-
-finish_job:
-    stage : finish
-    script:
-        - echo "---Finish Job Started---"
-        - echo "Finish!!!" >> $LOG_FILE_NAME
-        - echo "Owner of the Pipeline $CICD_VERSION is $OWNER_NAME" >> $LOG_FILE_NAME
-        - cat $LOG_FILE_NAME
-        - ls -l
-        - echo "---Finish Job Completed---" 
