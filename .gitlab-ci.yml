@@ -6,7 +6,7 @@ stages:
 
 
 variables:
-CI_REGISTRY_IMAGE: todo-app
+  CI_REGISTRY_IMAGE: todo-app
 
 image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 
