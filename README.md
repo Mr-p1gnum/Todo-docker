@@ -1,18 +1,19 @@
 # Сборка образа:(Предварительно можете перейти в папку с проектом)
-
-    ```
-    docker build . -t <Ваше название:версия>
-    ```
+```
+ docker build . -t <Ваше название:версия>
+```
 
 " . " -- Точка обозначает директорию сборки. Либо можете указать абсолютный путь
 
 # Запуск(через команду):
-`  docker run -v ./todo-data:/todo-app/todo.db ./todo-data:/todo-app/__pycache__ -d -p 80:5000 --name <Название контейнера> <Ваше название:версия>`
+```
+docker run -v ./todo-data:/todo-app/data -d -p 80:5000 --name <Название контейнера> <Ваше название:версия>
+```
  
 `-p 80:5000` -- Проброс портов в контейнер. 5000 должен быть обязателен если вы не меняли порт внутри кода приложения. 80 порт можете заменять на более удобный.
 
 # Запуск(через compose):
-В репозитории есть готовый docker-compose.yml 
+**В репозитории есть готовый docker-compose.yml**
 ```
 version: '3.8'
 services:
@@ -21,9 +22,8 @@ services:
     ports:
       - '80:5000'
     volumes:
-      - ./todo-data:/todo-app/todo.db
-      - ./todo-data:/todo-app/__pycache__
-    container_name: todo
+      - ./todo-data:/todo-app/data # <== Директории базы данных
+    container_name: todo # <== Название контейнера
     restart: 'unless-stopped'
 ```
 # Главное помните
