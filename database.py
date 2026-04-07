@@ -1,7 +1,9 @@
 import sqlite3
 import os
 
-DATABASE = 'todo.db'
+DB_DIR = 'data'
+DB_FILE = 'todo.db'
+DATABASE = os.path.join(DB_DIR, DB_FILE)
 
 def get_db():
     conn = sqlite3.connect(DATABASE)
@@ -9,6 +11,12 @@ def get_db():
     return conn
 
 def init_db():
+    conn = get_db()
+    
+    # Проверяем, существует ли таблица tasks
+    cursor = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='tasks'")
+    table_exists = cursor.fetchone() is not None
+    
     if not os.path.exists(DATABASE):
         conn = get_db()
         with open('schema.sql', 'r') as f:
