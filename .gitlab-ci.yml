@@ -5,6 +5,7 @@ stages:
 
 variables:
   IMAGE: $DOCKERHUB_USERNAME/todo-app:$CI_COMMIT_SHORT_SHA
+  STOP_NAME: name_for_stop
 
 image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 
@@ -23,6 +24,6 @@ test-job:
   stage: test
   script: 
     - docker pull $IMAGE
-    - docker run --rm -v /todo-data:/todo-app/data -d -p 80:5000 $IMAGE
+    - docker run --rm -v /todo-data:/todo-app/data -d -p 80:5000 --name $STOP_NAME $IMAGE
   after_script:
-    - docker rm -fv $IMAGE
+    - docker rm -fv $STOP_NAME
