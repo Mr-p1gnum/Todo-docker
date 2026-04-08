@@ -21,12 +21,14 @@ build-job:
   before_script:
     - mkdir image
   script: 
+    - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     - echo "Build Started"
     - docker build . -t $IMAGE 
-    - docker save $IMAGE | gzip > image/todo-app.tar.gz
+    - docker tag $IMAGE $DOCKERHUB_USERNAME/cicd:$CI_COMMIT_SHORT_SHA
+    - docker push $DOCKERHUB_USERNAME/cicd:$CI_COMMIT_SHORT_SHA
     - ls -lah
     - echo "Build completed"
-
+    
 test-job:
   stage: test
   script: 
