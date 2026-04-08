@@ -4,7 +4,6 @@ stages:
   - deploy_dev
   - deploy_prod
 
-
 variables:
   CI_REGISTRY_IMAGE: todo-app
   IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
@@ -24,18 +23,15 @@ build-job:
     - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     - echo "Build Started"
     - docker build . -t $IMAGE 
-    - docker tag $IMAGE $DOCKERHUB_USERNAME/cicd:$CI_COMMIT_SHORT_SHA
-    - docker push $DOCKERHUB_USERNAME/cicd:$CI_COMMIT_SHORT_SHA
+    - docker push $DOCKERHUB_USERNAME/cicd:$IMAGE
     - ls -lah
     - echo "Build completed"
     
 test-job:
   stage: test
   script: 
-    - docker load -i image/todo-app.tar.gz
+    - docker pull $DOCKERHUB_USERNAME/cicd:$CI_COMMIT_SHORT_SHA
     - docker run $IMAGE npm test
-
-
 
 deploy_to_dev_job:
   stage: deploy_dev
@@ -43,9 +39,8 @@ deploy_to_dev_job:
     - if: $CI_COMMIT_BRANCH == 'dev'
   script:
     - echo "Deploy Started"
-    - echo "Deploying...">> $LOG_FILE_NAME
+    - sleep 10
     - echo "Deploy completed"
-    - cat $LOG_FILE_NAME
 
 deploy_to_prod_job:
   stage: deploy_prod
@@ -55,4 +50,3 @@ deploy_to_prod_job:
     - echo "---Deploy to PROD Started---"
     - echo "Deploy to PROD..." >> $LOG_FILE_NAME
     - echo "---Deploy to PROD Completed---"  
-    - cat $LOG_FILE_NAME
