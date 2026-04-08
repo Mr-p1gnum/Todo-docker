@@ -14,7 +14,7 @@ image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 default:
   artifacts:
     paths:
-      - "image"
+      - image/
 
 build-job:
   stage: build
@@ -29,7 +29,7 @@ build-job:
 test-job:
   stage: test
   script: 
-    - docker load -i image/myapp.tar.gz
+    - docker load -i image/todo-app.tar.gz
     - docker run $IMAGE npm test
 
 
