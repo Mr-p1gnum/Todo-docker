@@ -20,7 +20,7 @@ build-job:
   before_script:
     - mkdir image
   script: 
-    - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    - echo "$DOCKER_ACCESS_KEY" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     - echo "Build Started"
     - docker build . -t $IMAGE 
     - docker push $DOCKERHUB_USERNAME/cicd:$IMAGE
