@@ -23,13 +23,13 @@ build-job:
   script: 
     - echo "Build Started"
     - docker build . -t $IMAGE 
-    - docker save $IMAGE > image/todo-app.tar
+    - docker save $IMAGE | gzip image/todo-app.tar.gz
     - echo "Build completed"
 
 test-job:
   stage: test
   script: 
-    - docker load -i image/myapp.tar
+    - docker load -i image/myapp.tar.gz
     - docker run $IMAGE npm test
 
 
