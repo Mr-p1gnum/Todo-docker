@@ -27,7 +27,7 @@ build-job:
 test-job:
   stage: test
   script: 
-    - docker pull $DOCKERHUB_USERNAME/cicd:$CI_COMMIT_SHORT_SHA
+    - docker pull $IMAGE
     - docker run $IMAGE npm test
 
 deploy_to_dev_job:
