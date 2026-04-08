@@ -1,8 +1,7 @@
 stages:
   - build
   - test
-  - deploy_dev
-  - deploy_prod
+
 
 variables:
   IMAGE: $DOCKERHUB_USERNAME/todo-app:$CI_COMMIT_SHORT_SHA
@@ -26,20 +25,3 @@ test-job:
     - docker pull $IMAGE
     - docker run --rm -v /todo-data:/todo-app/data -d -p 80:5000 $IMAGE
 
-deploy_to_dev_job:
-  stage: deploy_dev
-  rules:
-    - if: $CI_COMMIT_BRANCH == 'dev'
-  script:
-    - echo "Deploy Started"
-    - sleep 10
-    - echo "Deploy completed"
-
-deploy_to_prod_job:
-  stage: deploy_prod
-  rules:
-    - if: $CI_COMMIT_BRANCH == 'main'
-  script:
-    - echo "---Deploy to PROD Started---"
-    - echo "Deploy to PROD..." >> $LOG_FILE_NAME
-    - echo "---Deploy to PROD Completed---"  
