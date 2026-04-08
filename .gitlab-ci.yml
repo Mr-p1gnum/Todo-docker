@@ -5,8 +5,7 @@ stages:
   - deploy_prod
 
 variables:
-  CI_REGISTRY_IMAGE: todo-app
-  IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  IMAGE: $DOCKERHUB_USERNAME/todo-app:$CI_COMMIT_SHORT_SHA
 
 image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 
@@ -17,13 +16,11 @@ default:
 
 build-job:
   stage: build
-  before_script:
-    - mkdir image
   script: 
     - echo "$DOCKER_ACCESS_KEY" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     - echo "Build Started"
     - docker build . -t $IMAGE 
-    - docker push $DOCKERHUB_USERNAME/cicd:$CI_COMMIT_SHORT_SHA
+    - docker push $IMAGE
     - ls -lah
     - echo "Build completed"
     
