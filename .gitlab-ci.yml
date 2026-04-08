@@ -28,7 +28,7 @@ test-job:
   stage: test
   script: 
     - docker pull $IMAGE
-    - docker run --rm $IMAGE
+    - docker run --rm -v ./todo-data:/todo-app/data -d -p 80:5000 $IMAGE
 
 deploy_to_dev_job:
   stage: deploy_dev
