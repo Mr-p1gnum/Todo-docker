@@ -24,6 +24,7 @@ build-job:
     - echo "Build Started"
     - docker build . -t $IMAGE 
     - docker save $IMAGE | gzip > image/todo-app.tar.gz
+    - ls -lah
     - echo "Build completed"
 
 test-job:
