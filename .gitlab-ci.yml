@@ -23,7 +23,7 @@ build-job:
     - echo "$DOCKER_ACCESS_KEY" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     - echo "Build Started"
     - docker build . -t $IMAGE 
-    - docker push $IMAGE
+    - docker push $DOCKERHUB_USERNAME/cicd:$CI_COMMIT_SHORT_SHA
     - ls -lah
     - echo "Build completed"
     
