@@ -10,9 +10,10 @@ variables:
   IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
 image: alpine:latest
-default:
-  before_script:
-    - apk add git
+
+#default:
+ # before_script:
+ #   - apk add git
  # artifacts:
  #   paths:
   #    - image/
@@ -20,6 +21,7 @@ default:
 build-job:
   stage: build
   before_script:
+    - apk add git
     - mkdir image
     - git init
     - git remote add registry https://github.com/Mr-p1gnum/registry.git
@@ -36,7 +38,8 @@ build-job:
 
 test-job:
   stage: test
-
+  before_script:
+    - apk add git
   script: 
     - docker load -i image/todo-app.tar.gz
     - docker run $IMAGE npm test
