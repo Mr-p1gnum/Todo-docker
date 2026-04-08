@@ -24,4 +24,5 @@ test-job:
   script: 
     - docker pull $IMAGE
     - docker run --rm -v /todo-data:/todo-app/data -d -p 80:5000 $IMAGE
-
+  after_script:
+    - docker rm -fv $IMAGE
