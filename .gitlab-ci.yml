@@ -9,9 +9,10 @@ variables:
   CI_REGISTRY_IMAGE: todo-app
   IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
-image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-
-#default:
+image: alpine:latest
+default:
+  before_script:
+    - apk add git
  # artifacts:
  #   paths:
   #    - image/
@@ -28,13 +29,14 @@ build-job:
     - docker build . -t $IMAGE 
     - docker save $IMAGE | gzip > image/todo-app.tar.gz
     - ls -lah
-    - git add .
+    - git add image
     - git commit -m "image {$IMAGE}"
     - git push registry main
     - echo "Build completed"
 
 test-job:
   stage: test
+
   script: 
     - docker load -i image/todo-app.tar.gz
     - docker run $IMAGE npm test
