@@ -28,7 +28,7 @@ test-job:
   stage: test
   script: 
     - docker pull $IMAGE
-    - docker run $IMAGE npm test
+    - docker run --rm $IMAGE
 
 deploy_to_dev_job:
   stage: deploy_dev
