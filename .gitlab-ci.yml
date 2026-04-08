@@ -7,26 +7,30 @@ stages:
 
 variables:
   CI_REGISTRY_IMAGE: todo-app
+  IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
 image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 
-
+default:
+  artifacts:
+    paths:
+      - "image"
 
 build-job:
   stage: build
+  before_script:
+    - mkdir image
   script: 
     - echo "Build Started"
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker build . -t $IMAGE 
+    - docker save $IMAGE > image/todo-app.tar
     - echo "Build completed"
 
 test-job:
   stage: test
   script: 
-    - echo "Test Started"
-    - echo "Testing...">> $LOG_FILE_NAME
-    - echo "Test completed"
+    - docker load -i image/myapp.tar
+    - docker run $IMAGE npm test
 
 
 
