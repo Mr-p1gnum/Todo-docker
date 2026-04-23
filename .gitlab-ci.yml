@@ -13,7 +13,7 @@ image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 build-job:
   stage: build
   script: 
-    - echo "$DOCKER_ACCESS_KEY" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    - echo "$DOCKER_ACCESS_KEY" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin </dev/null
     - echo "Build Started"
     - docker build . -t $IMAGE 
     - docker push $IMAGE
