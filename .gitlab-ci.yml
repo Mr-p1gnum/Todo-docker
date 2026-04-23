@@ -7,7 +7,7 @@ variables:
   IMAGE: $DOCKERHUB_USERNAME/todo-app:$CI_COMMIT_SHORT_SHA
   STOP_NAME: name_for_stop
 
-image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+image: docker:latest
 
 
 build-job:
