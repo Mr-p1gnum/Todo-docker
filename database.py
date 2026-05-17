@@ -11,12 +11,11 @@ def get_db():
         user=os.environ.get("DB_USER", "postgres"),
         password=os.environ.get("DB_PASSWORD", "postgres")
     )
-    # Чтобы результаты были в виде словарей
     conn.cursor_factory = psycopg2.extras.RealDictCursor
     return conn
 
 def init_db():
-    """Создаёт таблицу, если её нет. Теперь использует IF NOT EXISTS."""
+    """Создаёт таблицу, если её нет."""
     conn = get_db()
     with conn.cursor() as cur:
         cur.execute("""
@@ -42,15 +41,10 @@ def get_all_tasks():
 def create_task(title):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute('INSERT INTO tasks (title) VALUES (%s)', (title,))
-        conn.commit()
-        task_id = cur.fetchone()['id']   # для SERIAL так не получится, сделаем иначе
-    # PostgreSQL: чтобы получить последний вставленный id, используем RETURNING
-    conn.close()
-    # Лучше переписать:
-    conn = get_db()
-    with conn.cursor() as cur:
-        cur.execute("INSERT INTO tasks (title) VALUES (%s) RETURNING id", (title,))
+        cur.execute(
+            "INSERT INTO tasks (title) VALUES (%s) RETURNING id", 
+            (title,)
+        )
         task_id = cur.fetchone()['id']
         conn.commit()
     conn.close()
