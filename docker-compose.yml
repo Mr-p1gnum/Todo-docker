@@ -3,9 +3,11 @@ version: '3.8'
 services:
   todo-app:
     image: todo-app:latest
+    env_file:
+      - ./.env
     ports:
       - '80:5000'
     volumes:
-      - /home/todo-app/todo-data/todo.db:/todo-app/todo.db
+      - ./todo-data:/todo-app/data
     container_name: todo
     restart: 'unless-stopped'
