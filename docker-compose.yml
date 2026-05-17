@@ -4,9 +4,8 @@ services:
   todo-app:
     image: todo-app:latest
     env_file:
-      - ./.env
-    ports:
-      - '80:5000'
+      - .env
+    network_mode: host
     volumes:
       - ./todo-data:/todo-app/data
     container_name: todo
