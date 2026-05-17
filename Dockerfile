@@ -3,7 +3,7 @@ FROM alpine:3.23
 WORKDIR /todo-app
 
 # Копируем файлы
-COPY app.py database.py requirements.txt schema.sql ./
+COPY app.py database.py requirements.txt ./
 COPY static /todo-app/static
 COPY templates /todo-app/templates
 # Устанавливаем зависимости

@@ -5,7 +5,10 @@ services:
     image: todo-app:latest
     env_file:
       - .env
-    network_mode: host
+#    network_mode: host
+    ports:
+      - '200:5000'
+    command: mkdir data
     volumes:
       - ./todo-data:/todo-app/data
     container_name: todo
